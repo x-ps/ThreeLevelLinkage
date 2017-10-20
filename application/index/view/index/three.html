@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>三级联动</title>
+</head>
+<body>
+<select id="province">
+    <option value="0">选择省</option>
+</select><br>
+<select id="cities">
+    <option value="0">选择市</option>
+</select><br>
+<select id="areas">
+    <option value="0">选择区</option>
+</select><br>
+
+
+<script src="__STATIC__/js/jquery-3.2.1.min.js"></script>
+<script>
+$(document).ready(function(){
+
+    province1();
+
+});
+function province1() {
+    $.ajax({
+        type:'post',
+        url:"{:url('province')}",
+        dataType:"json",
+        success:function (province) {
+            for (var i = 0; i < province.length; i++) {
+                $("#province").append("<option value=" + province[i].provinceid + ">" + province[i].province + "</option>");
+                <!-- console.log(data[i]); -->
+            }
+        }
+    });
+}
+ $('#province').change( function () {
+     var sheng=$('#province').val();
+     $.ajax({
+         type:'post',
+         url:"{:url('cities')}",
+         dataType:"json",
+         data:{cid:sheng},
+         success:function (cities) {
+             $('#cities').html('选择市');
+             for (var i = 0; i < cities.length; i++) {
+                 $("#cities").append("<option value=" + cities[i].cityid + ">" + cities[i].city + "</option>");
+                 <!-- console.log(data[i]); -->
+             }
+         }
+     });
+ } );
+$('#cities').change( function () {
+     var shi=$('#cities').val();
+     $.ajax({
+         type:'post',
+         url:"{:url('areas')}",
+         dataType:"json",
+         data:{aid:shi},
+         success:function (areas) {
+             $('#areas').html('选择区');
+             for (var i = 0; i < areas.length; i++) {
+                 $("#areas").append("<option value=" + areas[i].areaid + ">" + areas[i].area + "</option>");
+                 <!-- console.log(data[i]); -->
+             }
+         }
+     });
+ } )
+
+
+</script>
+</body>
+</html>
